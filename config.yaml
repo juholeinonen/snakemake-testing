@@ -10,7 +10,7 @@ speakers:
   th: Tea_Hunt_KG_Loeng
 
 files:
-  wavs: "/teamwork/t40511_asr/c/estonian-speech/train.wav-list"
+  wavs: "train.wav-list"
   trns: "/teamwork/t40511_asr/c/estonian-speech/train.verbatim.trn"
 
 params:
