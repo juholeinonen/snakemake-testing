@@ -8,12 +8,12 @@ speakers = {
 
 def get_speaker(wildcards):
 #  return expand("{speaker}", speaker=config["speakers"]) 
-  return speakers[wildcards.speaker]
+  return wildcards
 
 rule all:
   input:
 #    expand("{speaker}_wav-list", speaker=config[speakers])
-    expand("{speaker}_wav-list", speaker=speakers)
+    expand("{speaker}_wav-list", speaker=speakers.values())
 
 # Selecting all the audiofiles for the speakers from a very large file
 rule select_speaker_files:
@@ -22,6 +22,6 @@ rule select_speaker_files:
   output:
     speaker="{speaker}_wav-list"
   params:
-    speaker=get_speaker,
+    get_speaker,
   shell:
-    'grep "{params.speaker}" {input.wav} > {output.speaker}'
+    'grep "{params}" {input.wav} > {output.speaker}'
