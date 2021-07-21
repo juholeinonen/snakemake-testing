@@ -1,27 +1,13 @@
 configfile: "config.yaml"
 
-# Trying to replicate stackoverflow answer
-speakers = {
-  "1": "Andres_Laansoo",
-  "2": "A_Ots_loeng"
-}
-
-def get_speaker(wildcards):
-#  return expand("{speaker}", speaker=config["speakers"]) 
-  return wildcards
-
 rule all:
   input:
-#    expand("{speaker}_wav-list", speaker=config[speakers])
-    expand("{speaker}_wav-list", speaker=speakers.values())
+    expand("{speaker}_wav-list", speaker=config["speakers"].values())
 
-# Selecting all the audiofiles for the speakers from a very large file
 rule select_speaker_files:
   input:
     wav=config["files"]["wavs"]
   output:
     speaker="{speaker}_wav-list"
-  params:
-    get_speaker,
   shell:
-    'grep "{params}" {input.wav} > {output.speaker}'
+    'grep "{wildcards.speaker}" {input.wav} > {output.speaker}'
