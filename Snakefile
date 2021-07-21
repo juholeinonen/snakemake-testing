@@ -2,8 +2,8 @@ configfile: "config.yaml"
 
 # Trying to replicate stackoverflow answer
 speakers = {
-  "1": "And_Laa",
-  "2": "A_log"
+  "1": "Andres_Laansoo",
+  "2": "A_Ots_loeng"
 }
 
 def get_speaker(wildcards):
@@ -13,7 +13,7 @@ def get_speaker(wildcards):
 rule all:
   input:
 #    expand("{speaker}_wav-list", speaker=config[speakers])
-    expand("{speaker}", speaker=speakers.values())
+    expand("{speaker}_wav-list", speaker=speakers)
 
 # Selecting all the audiofiles for the speakers from a very large file
 rule select_speaker_files:
