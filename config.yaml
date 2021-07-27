@@ -11,7 +11,8 @@ speakers:
 
 files:
   wavs: "train.wav-list"
-  trns: "/teamwork/t40511_asr/c/estonian-speech/train.verbatim.trn"
+#  trns: "/teamwork/t40511_asr/c/estonian-speech/train.verbatim.trn"
+  trns: "train.verbatim.trn"
 
 params:
   seconds: 1000
