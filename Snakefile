@@ -2,40 +2,41 @@ configfile: "config.yaml"
 
 rule all:
   input:
-    expand("{speaker}_wav-list", speaker=config["speakers"].values())
+    expand("{speaker}_trn_list_seconds", speaker=config["speakers"].values())
 
 rule select_speaker_files_from_wav_list:
   input:
-    wav=config["files"]["wavs"]
+    wav=config["files"]["wav"]
   output:
-    speaker="{speaker}_wav-list"
+    wav="{speaker}_wav_list"
   shell:
-    'grep "{wildcards.speaker}" {input.wav} > {output.speaker}'
+    'grep "{wildcards.speaker}" {input.wav} > {output.wav}'
 
 rule select_speaker_files_from_trn_list:
   input:
     trn=config["files"]["trn"]
   output:
-    speaker="{speaker}_trn-list"
+    trn="{speaker}_trn_list"
   shell:
-    'grep "{wildcards.speaker}" {input.trn} > {output.speaker}'
+    'grep "{wildcards.speaker}" {input.trn} > {output.trn}'
 
 rule select_x_second_amount_of_wavs:
   input:
-    wav="{speaker}_wav-list"
-    script="scripts/takeXseconds.py"
-    seconds=config["params"]["seconds"]
+    wav="{speaker}_wav_list",
+    script="scripts/takeXseconds.py",
   output:
-    wav="{speaker}_{input.seconds}_seconds_wav_list"
+    wav="{speaker}_wav_list_seconds"
+  params:
+    seconds=config["params"]["seconds"]
   shell:
-    "{input.script} {input.wav} {output.wav} {input.seconds}"
+    "{input.script} {input.wav} {output.wav} {params.seconds}"
 
 rule select_transcripts_for_seconds_wav_list:
   input:
-    wav="{speaker_seconds}_seconds_wav_list"
-    speaker="{speaker}_trn-list"
+    wav="{speaker}_wav_list_seconds",
+    speaker="{speaker}_trn_list",
     script="scripts/fix_trn.py"
   output:
-    trn="{speaker_seconds}_seconds_trn_list"
+    trn="{speaker}_trn_list_seconds"
   shell:
    "{input.script} {input.speaker} {output.trn} {input.wav}" 

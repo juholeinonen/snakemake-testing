@@ -10,9 +10,9 @@ speakers:
   th: Tea_Hunt_KG_Loeng
 
 files:
-  wavs: "train.wav-list"
+  wav: "train.wav-list"
 #  trns: "/teamwork/t40511_asr/c/estonian-speech/train.verbatim.trn"
-  trns: "train.verbatim.trn"
+  trn: "train.verbatim.trn"
 
 params:
-  seconds: 1000
+  seconds: "1000"
