@@ -3,7 +3,7 @@ configfile: "config.yaml"
 
 rule all:
   input:
-    expand("{speaker}_train/text", speaker=config["speakers"].values())
+    expand("{speaker}_{dir_type}.tar.gz", speaker=config["speakers"].values(), dir_type=["data", "wavs"])
 
 
 # Selecting all the audio files with certain ID/speaker from the complete list
@@ -50,7 +50,7 @@ rule select_transcripts_for_seconds_wav_list:
   shell:
    "{input.script} {input.trn} {output.trn} {input.wav}" 
 
-
+    
 # Creating speaker/ID specific directories with other necessary files for Kaldi
 rule create_speaker_folders:
   input:
@@ -58,15 +58,23 @@ rule create_speaker_folders:
     wav="{speaker}_wav_seconds.scp",
     script="scripts/createKaldiFiles.py"
   output:
-    text="{speaker}_train/text",
-    utt2spk="{speaker}_train/utt2spk",
-    spk2utt="{speaker}_train/spk2utt",
-    wav="{speaker}_train/wav.scp"
+    tar="{speaker}_data.tar.gz"
   shell:
     """
     rm -f {wildcards.speaker}_train
     mkdir {wildcards.speaker}_train
     {input.script} {wildcards.speaker}_train {input.trn}
-    cp {output.utt2spk} {output.spk2utt}
-    mv {input.wav} {output.wav}
+    mv {input.wav} {wildcards.speaker}_train/wav.scp
+    tar czf {output.tar} {wildcards.speaker}_train
     """
+
+
+# Create tar.gz for the ID/speakers selected audio files
+rule create_wav_folders:
+  input:
+    wav="{speaker}_wav_seconds.scp",
+    script="scripts/copy_wavs.sh"
+  output:
+    tar="{speaker}_wavs.tar.gz"
+  shell:
+    "{input.script} {wildcards.speaker}"
