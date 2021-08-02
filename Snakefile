@@ -2,7 +2,7 @@ configfile: "config.yaml"
 
 rule all:
   input:
-    expand("{speaker}_trn_list_seconds", speaker=config["speakers"].values())
+    expand("{speaker}_train/text", speaker=config["speakers"].values())
 
 rule select_speaker_files_from_wav_list:
   input:
@@ -34,9 +34,28 @@ rule select_x_second_amount_of_wavs:
 rule select_transcripts_for_seconds_wav_list:
   input:
     wav="{speaker}_wav_list_seconds",
-    speaker="{speaker}_trn_list",
+    trn="{speaker}_trn_list",
     script="scripts/fix_trn.py"
   output:
     trn="{speaker}_trn_list_seconds"
   shell:
-   "{input.script} {input.speaker} {output.trn} {input.wav}" 
+   "{input.script} {input.trn} {output.trn} {input.wav}" 
+
+rule create_speaker_folders:
+  input:
+    trn="{speaker}_trn_list_seconds", 
+    wav="{speaker}_wav_list_seconds",
+    script="scripts/reformat_trn.py"
+  output:
+    text="{speaker}_train/text",
+    utt2spk="{speaker}_train/utt2spk",
+    spk2utt="{speaker}_train/spk2utt",
+    wav="{speaker}_train/wav.scp"
+  shell:
+    """
+    rm -f {wildcards.speaker}_train
+    mkdir {wildcards.speaker}_train
+    {input.script} {wildcards.speaker}_train {input.trn}
+    cp {output.utt2spk} {output.spk2utt}
+    mv {input.wav} {output.wav}
+    """
