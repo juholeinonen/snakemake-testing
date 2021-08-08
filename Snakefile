@@ -5,7 +5,8 @@ rule all:
   input:
     expand("{speaker}_{dir_type}.tar.gz", speaker=config["speakers"].values(), dir_type=["data", "wavs"])
 
-
+# Following for the Estonian data
+#
 # Selecting all the audio files with certain ID/speaker from the complete list
 rule select_speaker_files_from_wav_scp:
   input:
@@ -61,10 +62,10 @@ rule create_speaker_folders:
     tar="{speaker}_data.tar.gz"
   shell:
     """
-    rm -f {wildcards.speaker}_train
+    rm -rf {wildcards.speaker}_train
     mkdir {wildcards.speaker}_train
     {input.script} {wildcards.speaker}_train {input.trn}
-    mv {input.wav} {wildcards.speaker}_train/wav.scp
+    cp {input.wav} {wildcards.speaker}_train/wav.scp
     tar czf {output.tar} {wildcards.speaker}_train
     """
 
@@ -78,3 +79,4 @@ rule create_wav_folders:
     tar="{speaker}_wavs.tar.gz"
   shell:
     "{input.script} {wildcards.speaker}"
+

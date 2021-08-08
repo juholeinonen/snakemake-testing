@@ -13,6 +13,7 @@ files:
   wav: "train.wav-list"
 #  trns: "/teamwork/t40511_asr/c/estonian-speech/train.verbatim.trn"
   trn: "train.verbatim.trn"
+  mv_directory: "/teamwork/t40511_asr/c/martti_vainio/mv_original"
 
 params:
   seconds: "1000"

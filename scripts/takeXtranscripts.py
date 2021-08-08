@@ -23,4 +23,4 @@ def main(grepped_trn_list, filtered_trn_list, wav_list):
                 trn_file.write(line)
 
 if __name__ == "__main__":
-    main(sys.argv[1], sys.argv[2], sys.argv[3]))
+    main(sys.argv[1], sys.argv[2], sys.argv[3])

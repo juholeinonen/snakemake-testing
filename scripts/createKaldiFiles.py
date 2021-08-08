@@ -7,10 +7,11 @@ import sys
 def main(output_dir, trn_name):
     text_name = os.path.join(output_dir, "text")
     utt2spk_name = os.path.join(output_dir, "utt2spk")
+    spk2utt_name = os.path.join(output_dir, "spk2utt")
 
     with open(trn_name, "r", encoding="utf-8") as trn_file,\
         open(text_name, "w", encoding="utf-8") as text_file,\
-        open(utt2spk_name, "w", encoding="utf-8") as utt2spk_file:
+        open(utt2spk_name, "w", encoding="utf-8") as utt2spk_file,\
         open(spk2utt_name, "w", encoding="utf-8") as spk2utt_file:
 
         for line in trn_file:
