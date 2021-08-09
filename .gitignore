@@ -1,5 +1,6 @@
 # My own additions
 *.txt
+*.wav
 *.scp
 *.tar.gz
 *_train

@@ -1,0 +1,53 @@
+configfile: "config.yaml"
+
+rule all:
+  input:
+    expand("data/{speaker}_train/text", speaker=config["speakers"].values())
+    
+
+rule un_tar_speaker_data:
+  input:
+    tar="data/{speaker}_data.tar.gz"
+  output:
+    text="data/{speaker}_train/text"
+  shell:
+    "tar xzf {input.tar}"
+
+checkpoint un_tar_speaker_wavs:
+  input:
+    tar="data/{speaker}_wavs.tar.gz"
+  output:
+    dir=directory("data/{speaker}_wavs")
+  shell:
+    """
+    rm -rf {output.dir}
+    mkdir -p {output.dir}
+    tar xzf {input.tar} -C {output.dir}
+    """
+    
+rule make_txt_directory:
+  input:
+    text="data/{speaker}_train/text"
+    script="../../finnish-forced-alignment/data_preparation/text2txts.py"
+  output:
+    dir=directory("data/{speaker_txts}")
+  shell:
+   "{input.script} {input.text} --data_dir {output.dir}"
+
+rule align_with_finnish_forced_aligner:
+  input:
+    txts=directory("data/{speaker_txts}") 
+    wavs=directory("data/{speaker_wavs}")
+  output:
+    ctm="data/{speaker_ctms}"
+  shell:
+
+rule align_with_estonian_forced_aligner:
+  input:
+    txts=directory("data/{speaker_txts}") 
+    wavs=directory("data/{speaker_wavs}")
+  output:
+    ctm="data/{speaker_ctms}"
+  shell:
+
+

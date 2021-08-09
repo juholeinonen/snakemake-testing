@@ -1,0 +1,13 @@
+speakers:
+  al: Andres_Laansoo
+  ao: A_Ots_loeng
+  hv: Helina_Vigla
+  jp: Janek_Popell
+  mk: Maarja_Kruusmaa
+  ms: Margit_Suurna
+  mj: Mati_Jarvis
+  mr: Rillo_loeng
+  th: Tea_Hunt_KG_Loeng
+
+params:
+  seconds: "1000"
